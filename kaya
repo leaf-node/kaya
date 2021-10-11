@@ -18,41 +18,121 @@
 # Copyright 2021 Andrew Engelbrecht
 #
 
-source /etc/kaya.conf
 
-backup_options="--one-file-system / /srv"
-remote_user="root"
+# defaults
 
-hostname="$1"
-backup_dir="${backuproot}/${hostname}"
-password_file="${backup_dir}/repo-password"
-htpasswd_file="${backuproot}/.htpasswd"
+function kaya_usage {
+   cat << EOF 1>&2
+
+kaya usage:
+kaya [-c /etc/kaya.conf] [-u root] www1.example.com backup -- <restic flags>
+
+EOF
+}
+
+function set_defaults() {
+    global_conf="/etc/kaya.conf"
+    remote_user="root"
+}
+
+function get_params() {
+    positional=()
+    while [[ $# -gt 0 ]]; do
+        key="$1"
+
+        case $key in
+            -c|--conf)
+                global_conf="$2"
+                shift
+                shift
+                ;;
+            -u|--user)
+                remote_user="$2"
+                shift
+                shift
+                ;;
+            --)
+                shift
+                backup_options="$@"
+                break
+                ;;
+            -*)
+                kaya_usage
+                exit 1
+                ;;
+            *)
+                positional+=("$key")
+                shift
+                ;;
+        esac
+    done
+
+    set -- "${positional[@]}"
+
+    hostname="$1"
+    action="$2"
+
+    [[ -z ${hostname} ]] && kaya_usage && exit 1
+
+    case $action in
+        backup)
+            # currently the only option is to backup
+            ;;
+        *)
+            kaya_usage
+            exit 1
+            ;;
+    esac
+
+    [[ -z "${remote_user}" ]] && remote_user="root"
+
+}
 
 ## create restic backup repo and store the new password in plaintext, and hashed in .htpasswd
-if [[ ! -d $backup_dir ]] ; then
+function create_backup_dir() {
+    echo "kaya: Creating backup directory..."
 
-	echo "kaya: Creating backup directory..."
+    mkdir -p "${backup_dir}"; chmod 700 "${backup_dir}"
+    touch "${password_file}"; chmod 400 "${password_file}"; pwgen 30 1 > "${password_file}"
 
-	mkdir -p "${backup_dir}"; chmod 700 "${backup_dir}"
-	touch "${password_file}"; chmod 400 "${password_file}"; pwgen 30 1 > "${password_file}"
+    RESTIC_PASSWORD="$(cat "${password_file}")" restic -r "${backup_dir}" init > /dev/null
 
-	RESTIC_PASSWORD="$(cat "${password_file}")" restic -r "${backup_dir}" init > /dev/null
+    touch "${htpasswd_file}"; chmod 600 "${htpasswd_file}"
+    flock -w 10 "${htpasswd_file}.flock" -c "htpasswd -i -B '${htpasswd_file}' '${hostname}'" < "${password_file}" 2>&1 | grep -E -v "(Adding|Updating) password for user" 1>&2
 
-	touch "${htpasswd_file}"; chmod 600 "${htpasswd_file}"
-	flock -w 10 "${htpasswd_file}.flock" -c "htpasswd -i -B '${htpasswd_file}' '${hostname}'" < "${password_file}" 2>&1 | grep -E -v "(Adding|Updating) password for user" 1>&2
+    echo "kaya: Waiting 15s for rest-server file reload (first snapshot only)..."
+    sleep 15
+}
 
-	echo "kaya: Waiting 15s for rest-server file reload (first snapshot only)..."
-	sleep 15
-fi
+function start_backup() {
+    echo "kaya: Starting backup of ${hostname}"
+    echo
 
-echo "kaya: Starting backup of ${hostname}"
-echo
-
-# make the backup over a forwarded port
-cat << EOF | ssh -R ${remote_port}:localhost:${local_port} "${remote_user}@${hostname}" kaya-client
+    # make the backup over a forwarded port
+    cat << EOF | ssh -R "${remote_port}:localhost:${local_port}" "${remote_user}@${hostname}" kaya-client
 $remote_port
 $hostname
 $(cat "${password_file}")
 $backup_options
 EOF
+
+}
+
+function main() {
+    set_defaults
+    get_params "$@"
+
+    # shellcheck source=/etc/kaya.conf
+    source "${global_conf}"
+
+    backup_dir="${backuproot}/${hostname}"
+    password_file="${backup_dir}/repo-password"
+    htpasswd_file="${backuproot}/.htpasswd"
+
+    [[ ! -d $backup_dir ]] && create_backup_dir
+
+    [[ $action == backup ]] && start_backup
+}
+
+main "$@"
 
