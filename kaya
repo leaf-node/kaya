@@ -85,7 +85,7 @@ function get_params() {
     esac
 }
 
-## create restic backup repo and store the new password in plaintext, and hashed in .htpasswd
+## create restic backup repo, store the new password in plaintext, and hash it in .htpasswd
 function create_backup_dir() {
     echo "kaya: Creating backup directory..."
 
