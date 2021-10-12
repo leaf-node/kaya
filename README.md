@@ -74,8 +74,8 @@ systems, and it offers the rest-server mode for interaction.
 Kaya trusts the central backup server, so it stores the restic repo password in
 plain text in each repo's data directory. That way, it doesn't have to be
 synced from the backup server after initializaing the repository, copied to
-each backup target, and quickly changed after cloning a production server (see
-below).
+each backup target, saved in your password list for recoveries, nor quickly
+changed after cloning a production server (see below).
 
 With that in mind, the file system you back up to should be encrypted with
 LUKS, and it should require a password during the boot process, or when
