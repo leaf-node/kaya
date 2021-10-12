@@ -1,6 +1,6 @@
 # Kaya
 
-Kaya is a BASH frontend for [restic](https://github.com/restic/restic), a
+Kaya is a BASH front end for [restic](https://github.com/restic/restic), a
 modern incremental backup solution written in Go. Kaya provides functionality
 similar to "pull" mode backups, but making use of restic's
 [rest-server](https://github.com/restic/rest-server) in append-only mode.
@@ -49,9 +49,9 @@ Now you can initialize or update a backup like so:
 The parameters after `--` are passed to restic on the backup target. (`man
 restic-backup`)
 
-Note that the when using `--one-file-system`, you must explicity include the
-path for each mounted filesystem you wish to backup. If you forget to add a
-mountpoint like `/home`, you could miss important data. The alternative is to
+Note that the when using `--one-file-system`, you must explicitly include the
+path for each mounted file system you wish to backup. If you forget to add a
+mount point like `/home`, you could miss important data. The alternative is to
 not use that option, but make heavy use of statements like `--exclude /proc`,
 etc.
 
@@ -71,14 +71,14 @@ The main reasons for using restic is that it is easy to deploy, even on older
 systems, and it offers the rest-server mode for interaction.
 
 Kaya trusts the central backup server, so it stores the restic repo password in
-plaintext in each repo's directory on that server. The password has to be
+plain text in each repo's directory on that server. The password has to be
 stored somewhere, and chances are that you don't want to sync another password
 every time you deploy a new target machine, nor enter it every time you fetch a
 recent snapshot.
 
-With that in mind, the filesystem you back up to should be encrypted with LUKS,
-and it should require a password during the boot process, or when mounting
-manually.
+With that in mind, the file system you back up to should be encrypted with
+LUKS, and it should require a password during the boot process, or when
+mounting manually.
 
 One of the reasons why the central server initiates backups is so client
 machines won't try to send their backups all at the same time, or in a
@@ -89,7 +89,7 @@ production machine, and run it as a dev instance, with a different IP address
 and domain name. If both machines have the same credentials for pushing their
 backup, they'll both end up in the same repo. If you prune backups from time to
 time, you would occasionally delete a production backup and leave a dev backup
-in palce. If you export snapshots to tape archives, then in that scenario, you
+in place. If you export snapshots to tape archives, then in that scenario, you
 would possibly archive a dev backup to tape. Kaya connects to machines via SSH,
 so keeping a production machine's domain name associated with it avoids this
 issue. It also sends credentials to the target machine as part of the
