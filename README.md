@@ -1,12 +1,15 @@
 # Kaya
 
 Kaya is a BASH front end for [restic](https://github.com/restic/restic), a
-modern incremental backup solution written in Go. Kaya provides functionality
-similar to "pull" mode backups, but making use of restic's
-[rest-server](https://github.com/restic/rest-server) in append-only mode.
+modern incremental backup solution written in Go. Kaya provides centralized
+backup functionality via SSH, similar to "pull" mode backups, but with most of
+the heavy lifting being done by each client. Kaya makes use of restic's
+[rest-server](https://github.com/restic/rest-server) in append-only mode, so in
+theory, backed up machines can't delete their past backups, nor see backups for
+other machines.
 
-Kaya is **ALPHA** software, and may contain security bugs. Its API may also
-change in future releases.
+Kaya is **ALPHA** software, and may contain security bugs or other flaws.
+Kaya's API is still under development, and may change in future releases.
 
 ### License
 
