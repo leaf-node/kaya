@@ -83,9 +83,6 @@ function get_params() {
             exit 1
             ;;
     esac
-
-    [[ -z "${remote_user}" ]] && remote_user="root"
-
 }
 
 ## create restic backup repo and store the new password in plaintext, and hashed in .htpasswd
