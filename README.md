@@ -19,18 +19,16 @@ GPLv3-or-later
 
 Copy the binaries into place:
 
-    cp kaya         /usr/local/bin/
+    cp  kaya            /usr/local/bin/
+    scp kaya-client     www1.example.com:/usr/local/bin/
 
-    cp kaya.conf    /etc/
-    chown root:root /etc/kaya.conf
-    chmod 0600      /etc/kaya.conf
+    cp kaya.conf        /etc/
+    chown root:root     /etc/kaya.conf
+    chmod 0600          /etc/kaya.conf
+    vim                 /etc/kaya.conf
 
-    scp kaya-client www1.example.com:/usr/local/bin/
-
-    vim /etc/kaya.conf
-
-    mkdir -p /srv/backups/kaya/
-    touch    /srv/backups/kaya/.htpasswd
+    mkdir -p    /srv/backups/kaya/
+    touch       /srv/backups/kaya/.htpasswd
 
 **Also** install [rest-server](https://github.com/restic/rest-server) on the
 backup host, and [restic](https://github.com/restic/restic) on your backup
