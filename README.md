@@ -72,14 +72,14 @@ The main reasons for using restic is that it is easy to deploy, even on older
 systems, and it offers the rest-server mode for interaction.
 
 Kaya trusts the central backup server, so it stores the restic repo password in
-plain text in each repo's directory on that server. The password has to be
-stored somewhere, and chances are that you don't want to sync another password
-every time you deploy a new target machine, nor enter it every time you fetch a
-recent snapshot.
+plain text in each repo's data directory. That way, it doesn't have to be
+synced from the backup server after initializaing the repository, copied to
+each backup target, and quickly changed after cloning a production server (see
+below).
 
 With that in mind, the file system you back up to should be encrypted with
 LUKS, and it should require a password during the boot process, or when
-mounting manually.
+mounting the backup partition manually.
 
 One of the reasons why the central server initiates backups is so client
 machines won't try to send their backups all at the same time, or in a
