@@ -53,7 +53,7 @@ function get_params() {
                 ;;
             --)
                 shift
-                backup_options="$@"
+                backup_options="$*"
                 break
                 ;;
             -*)
