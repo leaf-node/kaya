@@ -88,22 +88,24 @@ randomized way.
 The other main reason for central coordination is because you may clone a
 production machine, and run it as a dev instance, with a different IP address
 and domain name. If both machines have the same credentials for pushing their
-backup, they'll both end up in the same repo. If you prune backups from time to
-time, you would occasionally delete a production backup and leave a dev backup
-in place. If you export snapshots to tape archives, then in that scenario, you
-would possibly archive a dev backup to tape. Kaya connects to machines via SSH,
-so keeping a production machine's domain name associated with it avoids this
-issue. It also sends credentials to the target machine as part of the
-connection, so the target machine doesn't have to keep track of them.
+backup, they would both end up in the same repo. If you then prune backups from
+time to time, you would occasionally delete a production backup and leave a dev
+backup in place. If you export snapshots to tape archives, then in that
+scenario, you would possibly archive a dev backup to tape.
 
-The rest-server's `--append-only` mode should prevent infected machines from
-deleting their own past backups. Target machines are still able to push new
-ones, and to read past backup history.
+Kaya avoids this issue by connecting via SSH from a backup server to machines
+with persistent domain names. It also sends credentials to the target machine
+as part of the connection, so the target machine doesn't have to keep track of
+them. Authentication and authorization are mediated by SSH keys.
 
-Kaya uses SSH tunneling, with a reverse port forward, so the client can talk to
-the rest-server on the backup server without the need to rely upon CA
+Kaya uses SSH tunneling, with reverse port forwarding, so the client can talk
+to the rest-server on the backup server without the need to rely upon CA
 certificates. This is especially useful for older machines that may have an
 outdated root certificate store.
+
+The rest-server's `--append-only` mode is meant to prevent infected machines
+from deleting their own past backups. Target machines are still able to push
+new backups, and to read archived data.
 
 ## Contributing
 
