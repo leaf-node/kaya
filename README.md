@@ -107,3 +107,8 @@ the rest-server on the backup server without the need to rely upon CA
 certificates. This is especially useful for older machines that may have an
 outdated root certificate store.
 
+## Contributing
+
+If you'd like to contribute to Kaya, feel free to open an issue or pull
+request.
+
