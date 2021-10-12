@@ -63,9 +63,7 @@ etc.
 
     restic -p repo-password-keep -r . mount ~/mount/
 
-When you're done:
-
-    fusermount -u ~/mount/
+When you're done, type `^C` or run `fusermount -u ~/mount/`
 
 ## Design / Security
 
@@ -91,15 +89,15 @@ production machine, and run it as a dev instance, with a different IP address
 and domain name. If both machines have the same credentials for pushing their
 backup, they'll both end up in the same repo. If you prune backups from time to
 time, you would occasionally delete a production backup and leave a dev backup
-in palce. If you export snapshots to tape archives, you would possibly archive
-a dev backup to tape. Kaya connects to machines via SSH, and based on DNS. It
-also sends the needed credentials upon SSH connection to the target machine.
-Keeping the domain name associated with the production system avoids this
-issue.
+in palce. If you export snapshots to tape archives, then in that scenario, you
+would possibly archive a dev backup to tape. Kaya connects to machines via SSH,
+so keeping a production machine's domain name associated with it avoids this
+issue. It also sends credentials to the target machine as part of the
+connection, so the target machine doesn't have to keep track of them.
 
 The rest-server's `--append-only` mode should prevent infected machines from
-deleting their own past backups, but they are still able to push new ones, and
-to read past backup history.
+deleting their own past backups. Target machines are still able to push new
+ones, and to read past backup history.
 
 Kaya uses SSH tunneling, with a reverse port forward, so the client can talk to
 the rest-server on the backup server without the need to rely upon CA
