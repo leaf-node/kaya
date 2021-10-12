@@ -126,7 +126,7 @@ function main() {
     source "${global_conf}"
 
     backup_dir="${backuproot}/${hostname}"
-    password_file="${backup_dir}/repo-password"
+    password_file="${backup_dir}/repo-password-keep"
     htpasswd_file="${backuproot}/.htpasswd"
 
     [[ ! -d $backup_dir ]] && create_backup_dir
