@@ -40,12 +40,6 @@ First you need to start restic's rest-server on the backup host:
 
     rest-server --path /srv/backups/kaya/ --append-only --private-repos
 
-Copy the binaries into place:
-
-    cp kaya /usr/local/bin/
-
-    scp kaya-client www1.example.com:/usr/local/bin/
-
 Now you can initialize or update a backup like so:
 
     kaya www1.example.com backup -- --one-file-system / /srv /home --exclude /foo
