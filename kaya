@@ -27,7 +27,7 @@ trap 'echo "$0:$LINENO:error: \"$BASH_COMMAND\" exit status: $?, PIPESTATUS: ${P
 # defaults
 
 function kaya_usage {
-    cat << EOF 1>&2
+    cat << EOF >&2
 
 kaya usage:
 kaya [-c /etc/kaya.conf] [-u root] www1.example.com backup -- <restic flags>
