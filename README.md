@@ -24,7 +24,6 @@ Copy the binaries into place:
 
     cp kaya.conf        /etc/
     chown root:root     /etc/kaya.conf
-    chmod 0600          /etc/kaya.conf
     vim                 /etc/kaya.conf
 
     mkdir -p    /srv/backups/kaya/
