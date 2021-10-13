@@ -23,15 +23,13 @@ shopt -s inherit_errexit 2>/dev/null ||: # ignore fail in bash < 4.4
 set -eE -o pipefail
 trap 'echo "$0:$LINENO:error: \"$BASH_COMMAND\" exit status: $?, PIPESTATUS: ${PIPESTATUS[*]}" >&2' ERR
 
-
-# settings come in on stdin
-read -r port
-read -r hostname
 read -r password
-read -r options
+
+port="$1"
+hostname="$2"
+shift 2
 
 username="${hostname}"
 backupdir="${hostname}"
 
-RESTIC_REPOSITORY="rest:http://${username}:${password}@localhost:${port}/${backupdir}/" RESTIC_PASSWORD="${password}" restic backup ${options}
-
+RESTIC_REPOSITORY="rest:http://${username}:${password}@localhost:${port}/${backupdir}/" RESTIC_PASSWORD="${password}" restic backup "$@"

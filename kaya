@@ -58,7 +58,7 @@ function get_params() {
                 ;;
             --)
                 shift
-                backup_options="$*"
+                backup_options=("$@")
                 break
                 ;;
             -*)
@@ -114,12 +114,13 @@ function start_backup() {
     echo "kaya: Starting backup of ${hostname}"
     echo
 
+    local password
+    password="$(head -n1 "${password_file}")"
+
     # make the backup over a forwarded port
-    cat << EOF | ssh -R "${remote_port}:localhost:${local_port}" "${remote_user}@${hostname}" kaya-client
-$remote_port
-$hostname
-$(cat "${password_file}")
-$backup_options
+    cat << EOF | ssh -R "${remote_port}:localhost:${local_port}" "${remote_user}@${hostname}" kaya-client \
+        "${remote_port@Q}" "${hostname@Q}" "${backup_options[@]@Q}"
+${password}
 EOF
 
 }
