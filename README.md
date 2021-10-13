@@ -20,7 +20,7 @@ GPLv3-or-later
 Copy the binaries into place:
 
     cp  kaya            /usr/local/bin/
-    scp kaya-client     www1.example.com:/usr/local/bin/
+    scp kaya-client     root@www1.example.com:/usr/local/bin/
 
     cp kaya.conf        /etc/
     chown root:root     /etc/kaya.conf
