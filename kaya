@@ -42,7 +42,8 @@ function set_defaults() {
 }
 
 function get_params() {
-    positional=()
+    local -a positional
+    local key
     while (( $# )); do
         key="$1"
 
