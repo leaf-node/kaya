@@ -131,6 +131,9 @@ function main() {
 
     # shellcheck source=/etc/kaya.conf
     source "${global_conf}"
+    if [[ -z $local_port ]]; then
+        local_port=8000
+    fi
 
     backup_dir="${backuproot}/${hostname}"
     password_file="${backup_dir}/repo-password-keep"
