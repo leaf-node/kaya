@@ -43,7 +43,7 @@ function set_defaults() {
 
 function get_params() {
     positional=()
-    while [[ $# -gt 0 ]]; do
+    while (( $# )); do
         key="$1"
 
         case $key in
