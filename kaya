@@ -22,7 +22,7 @@
 # defaults
 
 function kaya_usage {
-   cat << EOF 1>&2
+    cat << EOF 1>&2
 
 kaya usage:
 kaya [-c /etc/kaya.conf] [-u root] www1.example.com backup -- <restic flags>
@@ -76,8 +76,8 @@ function get_params() {
 
     case $action in
         backup)
-            # currently the only option is to backup
-            ;;
+        # currently the only option is to backup
+        ;;
         *)
             kaya_usage
             exit 1
