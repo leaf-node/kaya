@@ -18,6 +18,12 @@
 # Copyright 2021 Andrew Engelbrecht
 #
 
+if ! test "$BASH_VERSION"; then echo "error: shell is not bash" >&2; exit 1; fi
+shopt -s inherit_errexit 2>/dev/null ||: # ignore fail in bash < 4.4
+set -eE -o pipefail
+trap 'echo "$0:$LINENO:error: \"$BASH_COMMAND\" exit status: $?, PIPESTATUS: ${PIPESTATUS[*]}" >&2' ERR
+
+
 # settings come in on stdin
 read -r port
 read -r hostname
