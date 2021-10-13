@@ -135,9 +135,13 @@ function main() {
     password_file="${backup_dir}/repo-password-keep"
     htpasswd_file="${backuproot}/.htpasswd"
 
-    [[ ! -d $backup_dir ]] && create_backup_dir
+    if [[ ! -d $backup_dir ]]; then
+        create_backup_dir
+    fi
 
-    [[ $action == backup ]] && start_backup
+    if [[ $action == backup ]]; then
+        start_backup
+    fi
 }
 
 main "$@"
