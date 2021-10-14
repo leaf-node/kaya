@@ -24,24 +24,26 @@ set -eE -o pipefail
 trap 'echo "$0:$LINENO:error: \"$BASH_COMMAND\" exit status: $?, PIPESTATUS: ${PIPESTATUS[*]}" >&2' ERR
 
 
-# defaults
-
-function kaya_usage {
+kaya-usage {
     cat << EOF >&2
 
 kaya usage:
-kaya [-c /etc/kaya.conf] [-u root] www1.example.com backup -- <restic flags>
+kaya [-c CONFIG_PATH] [-u REMOTE_USER] HOST_TO_BACKUP backup -- RESTIC_ARGS
 
+REMOTE_USER          Default is root
+CONFIG_PATH          Default is /etc/kaya.conf
+HOST_TO_BACKUP       For example www1.example.com
+RESTIC_ARGS          See possible args by running "restic backup --help"
 EOF
     exit $1
 }
 
-function set_defaults() {
+set-defaults() {
     global_conf="/etc/kaya.conf"
     remote_user="root"
 }
 
-function get_params() {
+get-params() {
     local -a positional
     local key
     while (( $# )); do
@@ -63,7 +65,7 @@ function get_params() {
                 ;;
             -*)
                 echo "kaya: error: unrecognized argument: $key" >&2
-                kaya_usage 1
+                kaya-usage 1
                 ;;
             *)
                 positional+=("$key")
@@ -79,7 +81,7 @@ function get_params() {
 
     if [[ -z $hostname ]]; then
         echo "kaya: error: missing hostname argument" >&2
-        kaya_usage 1
+        kaya-usage 1
     fi
 
     case $action in
@@ -88,13 +90,13 @@ function get_params() {
         ;;
         *)
             echo "kaya: error: invalid action argument: $action" >&2
-            kaya_usage 1
+            kaya-usage 1
             ;;
     esac
 }
 
 ## create restic backup repo, store the new password in plaintext, and hash it in .htpasswd
-function create_backup_dir() {
+create-backup-dir() {
     echo "kaya: Creating backup directory..."
 
     mkdir -p "${backup_dir}"; chmod 700 "${backup_dir}"
@@ -110,7 +112,7 @@ function create_backup_dir() {
     sleep 15
 }
 
-function start_backup() {
+start-backup() {
     echo "kaya: Starting backup of ${hostname}"
     echo
 
@@ -125,7 +127,7 @@ EOF
 
 }
 
-function main() {
+main() {
     local program
     local missing_prog
     missing_prog=false
@@ -140,8 +142,8 @@ function main() {
     if $missing_prog; then
         exit 1
     fi
-    set_defaults
-    get_params "$@"
+    set-defaults
+    get-params "$@"
 
     # shellcheck source=/etc/kaya.conf
     source "${global_conf}"
@@ -154,11 +156,11 @@ function main() {
     htpasswd_file="${backuproot}/.htpasswd"
 
     if [[ ! -d $backup_dir ]]; then
-        create_backup_dir
+        create-backup-dir
     fi
 
     if [[ $action == backup ]]; then
-        start_backup
+        start-backup
     fi
 }
 
