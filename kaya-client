@@ -32,4 +32,14 @@ shift 2
 username="${hostname}"
 backupdir="${hostname}"
 
-RESTIC_REPOSITORY="rest:http://${username}:${password}@localhost:${port}/${backupdir}/" RESTIC_PASSWORD="${password}" restic backup "$@"
+export RESTIC_REPOSITORY="rest:http://${username}:${password}@localhost:${port}/${backupdir}/"
+export RESTIC_PASSWORD="${password}"
+
+cmd=( restic backup "$@")
+ret=0
+"${cmd[@]}" || ret=$?
+
+if (( ret )); then
+    echo "kaya-client: command exit code $ret: ${cmd[*]}"
+    exit $ret
+fi
