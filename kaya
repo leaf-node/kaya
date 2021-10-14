@@ -126,6 +126,20 @@ EOF
 }
 
 function main() {
+    local program
+    local missing_prog
+    missing_prog=false
+    for program in flock pwgen; do
+        if ! type -p $program &>/dev/null; then
+            echo "kaya: error: install $program (package $program on debian based systems)"
+        fi
+    done
+    if ! type -p htpasswd; then
+        echo "kaya: error: install htpasswd (package apache2-utils on debian based systems)"
+    fi
+    if $missing_prog; then
+        exit 1
+    fi
     set_defaults
     get_params "$@"
 

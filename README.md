@@ -17,6 +17,10 @@ GPLv3-or-later
 
 ## Installation
 
+Install dependencies:
+
+    apt install pwgen flock apache2-utils
+
 Copy the binaries into place:
 
     cp  kaya            /usr/local/bin/
@@ -29,10 +33,11 @@ Copy the binaries into place:
     mkdir -p    /srv/backups/kaya/
     touch       /srv/backups/kaya/.htpasswd
 
-**Also** install [rest-server](https://github.com/restic/rest-server) on the
-backup host, and [restic](https://github.com/restic/restic) on your backup
-targets.  Both can be complied into a statically-linked binary, so it's just a
-matter of copying the appropriate binaries into the `PATH` of each machine.
+**Also** install [rest-server](https://github.com/restic/rest-server) on
+the backup host, and [restic](https://github.com/restic/restic) on your
+backup targets and backup host.  Both can be complied into a
+statically-linked binary, so it's just a matter of copying the
+appropriate binaries into the `PATH` of each machine.
 
 ## Usage
 
