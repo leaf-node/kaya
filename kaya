@@ -142,11 +142,11 @@ main() {
     missing_prog=false
     for program in flock pwgen; do
         if ! type -p $program &>/dev/null; then
-            echo "kaya: error: install $program (package $program on debian based systems)"
+            echo "kaya: error: install $program (package $program on debian based systems)" >&2
         fi
     done
     if ! type -p htpasswd &>/dev/null; then
-        echo "kaya: error: install htpasswd (package apache2-utils on debian based systems)"
+        echo "kaya: error: install htpasswd (package apache2-utils on debian based systems)" >&2
     fi
     if $missing_prog; then
         exit 1

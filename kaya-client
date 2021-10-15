@@ -40,6 +40,6 @@ ret=0
 "${cmd[@]}" || ret=$?
 
 if (( ret )); then
-    echo "kaya-client: command exit code $ret: ${cmd[*]}"
+    echo "kaya-client: command exit code $ret: ${cmd[*]}" >&2
     exit $ret
 fi
