@@ -24,7 +24,7 @@ set -eE -o pipefail
 trap 'echo "$0:$LINENO:error: \"$BASH_COMMAND\" exit status: $?, PIPESTATUS: ${PIPESTATUS[*]}" >&2' ERR
 
 
-kaya-usage {
+kaya-usage() {
     cat << EOF >&2
 
 kaya usage:
@@ -35,7 +35,7 @@ CONFIG_PATH          Default is /etc/kaya.conf
 HOST_TO_BACKUP       For example www1.example.com
 RESTIC_ARGS          See possible args by running "restic backup --help"
 EOF
-    exit $1
+    exit "$1"
 }
 
 set-defaults() {
