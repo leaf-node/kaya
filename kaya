@@ -89,8 +89,8 @@ get-params() {
 
     case $action in
         backup)
-        # currently the only option is to backup
-        ;;
+            # currently the only option is to backup
+            ;;
         *)
             echo "kaya: error: invalid action argument: $action" >&2
             kaya-usage 1
