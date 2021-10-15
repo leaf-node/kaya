@@ -107,7 +107,10 @@ create-backup-dir() {
 
 # check / create the hashed password in .htpasswd
 update-htpasswd-file() {
-    touch "${htpasswd_file}"; chmod 600 "${htpasswd_file}"
+    if [[ ! -e $htpasswd_file ]] ; then
+        touch "${htpasswd_file}"
+    fi
+    chmod 600 "${htpasswd_file}"
 
     # check to see if the password is already there and correct
     # otherwise, update it
