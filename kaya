@@ -24,6 +24,9 @@ set -eE -o pipefail
 trap 'echo "$0:$LINENO:error: \"$BASH_COMMAND\" exit status: $?, PIPESTATUS: ${PIPESTATUS[*]}" >&2' ERR
 
 
+# first stable version of API between kaya and kaya-client
+kaya_protocol_version=1
+
 kaya-usage() {
     cat << EOF >&2
 
@@ -134,6 +137,7 @@ start-backup() {
     # make the backup over a forwarded port
     cat << EOF | ssh -R "${remote_port}:localhost:${local_port}" "${remote_user}@${hostname}" kaya-client \
         "${remote_port@Q}" "${hostname@Q}" "${backup_options[@]@Q}"
+${kaya_protocol_version}
 ${password}
 EOF
 
