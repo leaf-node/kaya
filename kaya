@@ -108,8 +108,8 @@ create-backup-dir() {
     flock -w 10 "${htpasswd_file}.flock" -c "htpasswd -i -B '${htpasswd_file}' '${hostname}'" < "${password_file}" \
         |& { grep -E -v "(Adding|Updating) password for user" >&2 ||:; }
 
-    echo "kaya: Waiting 15s for rest-server file reload (first snapshot only)..."
-    sleep 15
+    echo "kaya: Waiting > 30 seconds for rest-server file reload (first snapshot only)..."
+    sleep 32
 }
 
 start-backup() {
