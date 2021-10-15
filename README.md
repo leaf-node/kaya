@@ -13,7 +13,7 @@ Kaya's API is still under development, and may change in future releases.
 
 ### License
 
-GPLv3-or-later
+GPL-3.0-or-later
 
 ## Installation
 
@@ -114,5 +114,5 @@ new backups, and to read archived data.
 ## Contributing
 
 If you'd like to contribute to Kaya, feel free to open an issue or pull
-request.
+request, or email me with a link to your branch.
 
