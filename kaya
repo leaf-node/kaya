@@ -100,7 +100,7 @@ create-backup-dir() {
     echo "kaya: Creating backup directory..."
 
     mkdir -p "${backup_dir}"; chmod 700 "${backup_dir}"
-    touch "${password_file}"; chmod 600 "${password_file}"; pwgen 30 1 > "${password_file}"
+    touch "${password_file}"; chmod 600 "${password_file}"; pwgen 30 1 > "${password_file}"; chmod 400 "${password_file}"
 
     RESTIC_PASSWORD="$(cat "${password_file}")" restic -r "${backup_dir}" init > /dev/null
 }
