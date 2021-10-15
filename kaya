@@ -122,7 +122,7 @@ update-htpasswd-file() {
         flock -w 10 "${htpasswd_file}.flock" -c "htpasswd -i -B '${htpasswd_file}' '${hostname}'" < "${password_file}" \
             |& { grep -E -v "(Adding|Updating) password for user" >&2 ||:; }
 
-        echo "kaya: Waiting 32 seconds for rest-server file reload (first snapshot only)..."
+        echo "kaya: Waiting for rest-server to reload .htpasswd... (mostly for new backups)"
         sleep 32
     fi
 }
