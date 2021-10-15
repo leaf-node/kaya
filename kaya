@@ -136,7 +136,7 @@ main() {
             echo "kaya: error: install $program (package $program on debian based systems)"
         fi
     done
-    if ! type -p htpasswd; then
+    if ! type -p htpasswd &>/dev/null; then
         echo "kaya: error: install htpasswd (package apache2-utils on debian based systems)"
     fi
     if $missing_prog; then
