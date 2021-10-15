@@ -95,7 +95,7 @@ get-params() {
     esac
 }
 
-## create restic backup repo, store the new password in plaintext, and hash it in .htpasswd
+## create restic backup repo, store the new password in plaintext
 create-backup-dir() {
     echo "kaya: Creating backup directory..."
 
@@ -103,13 +103,22 @@ create-backup-dir() {
     touch "${password_file}"; chmod 600 "${password_file}"; pwgen 30 1 > "${password_file}"
 
     RESTIC_PASSWORD="$(cat "${password_file}")" restic -r "${backup_dir}" init > /dev/null
+}
 
+# check / create the hashed password in .htpasswd
+update-htpasswd-file() {
     touch "${htpasswd_file}"; chmod 600 "${htpasswd_file}"
-    flock -w 10 "${htpasswd_file}.flock" -c "htpasswd -i -B '${htpasswd_file}' '${hostname}'" < "${password_file}" \
-        |& { grep -E -v "(Adding|Updating) password for user" >&2 ||:; }
 
-    echo "kaya: Waiting > 30 seconds for rest-server file reload (first snapshot only)..."
-    sleep 32
+    # check to see if the password is already there and correct
+    # otherwise, update it
+    if ! grep -q "^${hostname}" "${htpasswd_file}" || ! htpasswd -i -v "${htpasswd_file}" "${hostname}" < "${password_file}" &> /dev/null ; then
+
+        flock -w 10 "${htpasswd_file}.flock" -c "htpasswd -i -B '${htpasswd_file}' '${hostname}'" < "${password_file}" \
+            |& { grep -E -v "(Adding|Updating) password for user" >&2 ||:; }
+
+        echo "kaya: Waiting > 30 seconds for rest-server file reload (first snapshot only)..."
+        sleep 32
+    fi
 }
 
 start-backup() {
@@ -158,6 +167,8 @@ main() {
     if [[ ! -d $backup_dir ]]; then
         create-backup-dir
     fi
+
+    update-htpasswd-file
 
     if [[ $action == backup ]]; then
         start-backup
