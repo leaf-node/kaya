@@ -171,6 +171,12 @@ main() {
         create-backup-dir
     fi
 
+    if [[ ! -e $password_file ]]; then
+        echo "kaya: error: the repo password file is missing:" >&2
+        echo "${password_file}" >&2
+        exit 1
+    fi
+
     update-htpasswd-file
 
     if [[ $action == backup ]]; then
