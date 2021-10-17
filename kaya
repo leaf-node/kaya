@@ -164,8 +164,8 @@ main() {
     # shellcheck source=/etc/kaya.conf
     source "${global_conf}"
 
-    if [[ -z $backuproot ]]; then
-        echo "kaya: error: no backuproot variable set in ${global_conf}" >&2
+    if [[ -z $backup_root ]]; then
+        echo "kaya: error: no backup_root variable set in ${global_conf}" >&2
         exit 1
     fi
     if [[ -z $local_port ]]; then
@@ -175,9 +175,9 @@ main() {
         remote_port=8777
     fi
 
-    backup_dir="${backuproot}/${hostname}"
+    backup_dir="${backup_root}/${hostname}"
     password_file="${backup_dir}/repo-password-keep"
-    htpasswd_file="${backuproot}/.htpasswd"
+    htpasswd_file="${backup_root}/.htpasswd"
 
     if [[ ! -d $backup_dir ]]; then
         create-backup-dir
