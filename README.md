@@ -1,6 +1,6 @@
 # Kaya
 
-Kaya is a BASH front end for [restic](https://github.com/restic/restic), a
+Kaya is a Bash front end for [restic](https://github.com/restic/restic), a
 modern incremental backup solution written in Go. Kaya provides centralized
 backup functionality via SSH, similar to "pull" mode backups, but with most of
 the heavy lifting being done by each client. Kaya makes use of restic's
