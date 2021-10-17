@@ -163,8 +163,16 @@ main() {
 
     # shellcheck source=/etc/kaya.conf
     source "${global_conf}"
+
+    if [[ -z $backuproot ]]; then
+        echo "kaya: error: no backuproot variable set in ${global_conf}" >&2
+        exit 1
+    fi
     if [[ -z $local_port ]]; then
         local_port=8000
+    fi
+    if [[ -z $remote_port ]]; then
+        remote_port=8777
     fi
 
     backup_dir="${backuproot}/${hostname}"
