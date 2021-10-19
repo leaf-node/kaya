@@ -134,13 +134,23 @@ start-backup() {
     local password
     password="$(head -n1 "${password_file}")"
 
+    log_dump="$(mktemp)"
+
     # make the backup over a forwarded port
     cat << EOF | ssh -R "${remote_port}:localhost:${local_port}" "${remote_user}@${hostname}" kaya-client \
-        "${remote_port@Q}" "${hostname@Q}" "${backup_options[@]@Q}"
+        "${remote_port@Q}" "${hostname@Q}" "${backup_options[@]@Q}" \
+        | tee "${log_dump}" | grep -v "KAYA_SUCCESSFUL_BACKUP_MESSAGE"
 ${kaya_protocol_version}
 ${password}
 EOF
 
+    # confirm that the SSH session completed
+    if tail -1 "${log_dump}" | grep -v -e "^KAYA_SUCCESSFUL_BACKUP_MESSAGE" -e "^kaya-client: command exit code" ; then
+	rm "${log_dump}"
+	echo "kaya: backup interrupted or failed to complete" >&2
+	exit 1
+    fi
+    rm "${log_dump}"
 }
 
 main() {
