@@ -21,7 +21,7 @@
 if ! test "$BASH_VERSION"; then echo "error: shell is not bash" >&2; exit 1; fi
 shopt -s inherit_errexit 2>/dev/null ||: # ignore fail in bash < 4.4
 set -eE -o pipefail
-trap 'echo "$0:$LINENO:error: \"$BASH_COMMAND\" exit status: $?, PIPESTATUS: ${PIPESTATUS[*]}" >&2' ERR
+trap 'echo "kaya: backup failed" >&2' ERR
 
 
 # first stable version of API between kaya and kaya-client
