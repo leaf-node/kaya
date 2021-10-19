@@ -24,8 +24,7 @@ set -eE -o pipefail
 trap 'echo "kaya: backup failed" >&2' ERR
 
 
-# first stable version of API between kaya and kaya-client
-kaya_protocol_version=1
+kaya_protocol_version=2
 
 kaya-usage() {
     cat << EOF >&2

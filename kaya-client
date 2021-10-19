@@ -23,13 +23,20 @@ shopt -s inherit_errexit 2>/dev/null ||: # ignore fail in bash < 4.4
 set -eE -o pipefail
 trap 'echo "kaya-client: backup failed" >&2' ERR
 
+
+preferred_protocol_version=2
+
 read -r kaya_protocol_version
 
-if [[ $kaya_protocol_version != 1 ]] ; then
-    echo "kaya-client: error: mismatched protocol version with kaya" >&2
-    echo "kaya-client: error: kaya protocol version: ${kaya_protocol_version} kaya-client protocol version: 1" >&2
-    exit 1
-fi
+case $kaya_protocol_version in
+    1|2)
+        ;;
+    *)
+        echo "kaya-client: error: mismatched protocol version with kaya" >&2
+        echo "kaya-client: error: kaya protocol version: ${kaya_protocol_version} kaya-client protocol version: ${preferred_protocol_version}" >&2
+        exit 1
+        ;;
+esac
 
 read -r password
 
@@ -52,5 +59,5 @@ if (( ret )); then
     exit $ret
 else
     # needed in case ssh dies on the backup server, and exits with 0 (patched in OpenSSH version 8.8)
-    echo "KAYA_SUCCESSFUL_BACKUP_MESSAGE"
+    if [[ $kaya_protocol_version -ge 2 ]] ; then echo "KAYA_SUCCESSFUL_BACKUP_MESSAGE" ; fi
 fi
