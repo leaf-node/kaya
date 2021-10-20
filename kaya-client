@@ -57,7 +57,7 @@ ret=0
 if (( ret )); then
     echo "kaya-client: command exit code $ret: ${cmd[*]}" >&2
     exit $ret
-else
-    # needed in case ssh dies on the backup server, and exits with 0 (patched in OpenSSH version 8.8)
-    if [[ $kaya_protocol_version -ge 2 ]] ; then echo "KAYA_SUCCESSFUL_BACKUP_MESSAGE" ; fi
 fi
+
+# needed in case ssh dies on the backup server, and exits with 0 (patched in OpenSSH version 8.8)
+if [[ $kaya_protocol_version -ge 2 ]] ; then echo "KAYA_SUCCESSFUL_BACKUP_MESSAGE" ; fi
