@@ -138,7 +138,7 @@ start-backup() {
     # make the backup over a forwarded port
     cat << EOF | ssh -R "${remote_port}:localhost:${local_port}" "${remote_user}@${hostname}" kaya-client \
         "${remote_port@Q}" "${hostname@Q}" "${backup_options[@]@Q}" \
-        | tee "${log_dump}" | grep -v "KAYA_SUCCESSFUL_BACKUP_MESSAGE"
+        | tee "${log_dump}" | { grep -v "KAYA_SUCCESSFUL_BACKUP_MESSAGE" ||:; }
 ${kaya_protocol_version}
 ${password}
 EOF
