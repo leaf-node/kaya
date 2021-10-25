@@ -201,6 +201,12 @@ main() {
 
     update-htpasswd-file
 
+    if ! lsof -Pi ":${local_port}" -sTCP:LISTEN -t > /dev/null ; then
+        echo "kaya: error: rest-server is not listening on port ${local_port}" >&2
+        echo "kaya: error: start rest-server or update ${global_conf}" >&2
+        exit 1
+    fi
+
     if [[ $action == backup ]]; then
         start-backup
     fi
