@@ -54,10 +54,18 @@ cmd=( restic backup "$@")
 ret=0
 "${cmd[@]}" || ret=$?
 
-if (( ret )); then
+case $ret in
+    0)
+        # success
+        ;;
+    3)
+        # restic warning, such as file randomly disappearing during backup
+        # consider it success
+        ;;
+    *)
     echo "kaya-client: command exit code $ret: ${cmd[*]}" >&2
     exit $ret
-fi
+esac
 
 # needed in case ssh dies on the backup server, and exits with 0 (patched in OpenSSH version 8.8)
 if [[ $kaya_protocol_version -ge 2 ]] ; then echo "KAYA_SUCCESSFUL_BACKUP_MESSAGE" ; fi
