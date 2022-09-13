@@ -111,6 +111,12 @@ The rest-server's `--append-only` mode is meant to prevent infected machines
 from deleting their own past backups. Target machines are still able to push
 new backups, and to read archived data.
 
+**Security limitation:** The remote client backed up via Kaya runs the restic
+command, so it has control over setting time stamp metadata for new backups. If
+malicious time stamps are set by the client, and you then prune your backups,
+legitimate backups you want to keep may be automatically removed, leaving
+illegitimate ones.
+
 ## Contributing
 
 If you'd like to contribute to Kaya, feel free to open an issue or pull
