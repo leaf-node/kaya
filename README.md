@@ -72,6 +72,12 @@ When you're done, type `^C` or run `fusermount -u ~/mount/`
 
 ## Design / Security
 
+⚠️  **Security limitation:** The remote client backed up via Kaya runs the
+restic command, so it has control over setting time stamp metadata for new
+backups. If malicious time stamps are set by the client, and you then prune
+your backups, legitimate backups you want to keep may be automatically removed,
+leaving illegitimate ones.
+
 The main reasons for using restic is that it is easy to deploy, even on older
 systems, and it offers the rest-server mode for interaction.
 
@@ -110,12 +116,6 @@ outdated root certificate store.
 The rest-server's `--append-only` mode is meant to prevent infected machines
 from deleting their own past backups. Target machines are still able to push
 new backups, and to read archived data.
-
-**Security limitation:** The remote client backed up via Kaya runs the restic
-command, so it has control over setting time stamp metadata for new backups. If
-malicious time stamps are set by the client, and you then prune your backups,
-legitimate backups you want to keep may be automatically removed, leaving
-illegitimate ones.
 
 ## Contributing
 
