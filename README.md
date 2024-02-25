@@ -60,6 +60,13 @@ mount point like `/home`, you could miss important data. The alternative is to
 not use that option, but make heavy use of statements like `--exclude /proc`,
 etc.
 
+Note that kaya runs `restic init` using the local restic and backups are run
+using the remote restic. If the remote restic version is too old
+compared to the local one, this can result in an error: `Fatal: config
+cannot be loaded: unsupported repository version`.  To fix this, either
+adjust the restic versions or initialize with a repository version by
+adjusting how `kaya` calls `restic init`.
+
 ### Extracting data from backup repos
 
     mkdir ~/mount/
