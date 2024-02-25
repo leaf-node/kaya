@@ -45,7 +45,7 @@ First you need to start restic's rest-server on the backup host:
 
     rest-server --path /srv/backups/kaya/ --append-only --private-repos
 
-Now you can initialize or update a backup like so:
+Now you can initialize (if it doesn't yet exist) and update a backup like so:
 
     kaya www1.example.com backup -- --one-file-system / /srv /home --exclude /foo
 
