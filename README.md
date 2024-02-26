@@ -129,3 +129,8 @@ new backups, and to read archived data.
 If you'd like to contribute to Kaya, feel free to open an issue or pull
 request, or email me with a link to your branch.
 
+Kaya's bash files use emacs standard indentation. To indent FILE, run
+
+```
+emacs FILE --batch --eval '(progn (indent-region (point-min) (point-max)) (save-buffer))'
+```
