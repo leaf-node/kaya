@@ -45,7 +45,7 @@ First you need to start restic's rest-server on the backup host:
 
     rest-server --path /srv/backups/kaya/ --append-only --private-repos
 
-Now you can initialize or update a backup like so:
+Now you can initialize (if it doesn't yet exist) and update a backup like so:
 
     kaya www1.example.com backup -- --one-file-system / /srv /home --exclude /foo
 
@@ -59,6 +59,13 @@ path for each mounted file system you wish to backup. If you forget to add a
 mount point like `/home`, you could miss important data. The alternative is to
 not use that option, but make heavy use of statements like `--exclude /proc`,
 etc.
+
+Note that kaya runs `restic init` using the local restic and backups are run
+using the remote restic. If the remote restic version is too old
+compared to the local one, this can result in an error: `Fatal: config
+cannot be loaded: unsupported repository version`.  To fix this, either
+adjust the restic versions or initialize with a repository version by
+adjusting how `kaya` calls `restic init`.
 
 ### Extracting data from backup repos
 
