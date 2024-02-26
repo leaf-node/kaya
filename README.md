@@ -88,20 +88,30 @@ When you're done, type `^C` or run `fusermount -u ~/mount/`
 restic command, so it has control over setting time stamp metadata for new
 backups. If malicious time stamps are set by the client, and you then prune
 your backups, legitimate backups you want to keep may be automatically removed,
-leaving illegitimate ones.
+leaving illegitimate ones. In other words, you are not fully protected from
+ransomware attacks if you use of Restic or Kaya in combination with automatic
+pruning of old Restic backups.
 
 The main reasons for using restic is that it is easy to deploy, even on older
 systems, and it offers the rest-server mode for interaction.
 
 Kaya trusts the central backup server, so it stores the restic repo password in
 plain text in each repo's data directory. That way, it doesn't have to be
-synced from the backup server after initializaing the repository, copied to
-each backup target, saved in your password list for recoveries, nor quickly
-changed after cloning a production server (see below).
+synced from the backup server after initializing the repository, copied to each
+backup target, saved in your password list for recoveries, nor quickly changed
+after cloning a production server (see below).
 
 With that in mind, the file system you back up to should be encrypted with
 LUKS, and it should require a password during the boot process, or when
 mounting the backup partition manually.
+
+It's a good idea to automatically copy Kaya's stored passwords/keys into /root/
+on the backup host via a cron job. If you backup that directory via Kaya, you
+should be able to recover keys that were accidentally deleted from Kaya
+repositories. If you only have a few backups, then another option is to store
+them in a password manager. It's also a good idea to copy the backup server's
+self-backup key into a password manager. Otherwise, you can permanently lose
+access to backup repos and their history.
 
 One of the reasons why the central server initiates backups is so client
 machines won't try to send their backups all at the same time, or in a
@@ -125,9 +135,10 @@ to the rest-server on the backup server without the need to rely upon CA
 certificates. This is especially useful for older machines that may have an
 outdated root certificate store.
 
-The rest-server's `--append-only` mode is meant to prevent infected machines
-from deleting their own past backups. Target machines are still able to push
-new backups, and to read archived data.
+The rest-server's `--append-only` mode is meant to prevent ransomware-infected
+machines from deleting their own past backups in a naive way, but keep in mind
+the above security warning regarding backup pruning. Target machines are still
+able to push new backups, and to read archived data.
 
 ## Contributing
 
