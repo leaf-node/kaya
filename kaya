@@ -89,6 +89,7 @@ get-params() {
     case $action in
         backup)
             # currently the only option is to backup
+            true
             ;;
         *)
             echo "kaya: error: invalid action argument: $action" >&2
@@ -138,8 +139,8 @@ start-backup() {
 
     # make the backup over a forwarded port
     cat << EOF | ssh -o PasswordAuthentication=no -R "${remote_port}:localhost:${local_port}" \
-        "${remote_user}@${hostname}" kaya-client \
-        "${remote_port@Q}" "${hostname@Q}" "${backup_options[@]@Q}" \
+                     "${remote_user}@${hostname}" kaya-client \
+                     "${remote_port@Q}" "${hostname@Q}" "${backup_options[@]@Q}" \
         | tee "${log_dump}" | { grep -v "KAYA_SUCCESSFUL_BACKUP_MESSAGE" ||:; }
 ${kaya_protocol_version}
 ${password}
@@ -215,3 +216,6 @@ main() {
 
 main "$@"
 
+# Local Variables:
+# sh-basic-offset: 4
+# End:
