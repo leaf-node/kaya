@@ -8,7 +8,12 @@ the heavy lifting being done by each client. Kaya makes use of restic's
 theory, backed up machines can't delete their past backups, nor see backups for
 other machines.
 
-Kaya is **ALPHA** software, and may contain security bugs or other flaws.
+Kaya is not thoroughly tested and may have bugs, but it has been used by
+the Free Software Foundation for all their backups since 2021. The
+newest restic version someone has reported using with kaya is 0.16.4
+(current as of February 2024). Please make a PR if you've tested a newer
+version.
+
 Kaya's API is still under development, and may change in future releases.
 
 ### License
