@@ -24,7 +24,7 @@ GPL-3.0-or-later
 
 Install dependencies:
 
-    apt install pwgen flock apache2-utils
+    apt install pwgen util-linux apache2-utils
 
 Copy the binaries into place:
 
